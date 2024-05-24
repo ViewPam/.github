@@ -4,9 +4,65 @@
 # GitHub Role
 해당 Repository는 다음과 같은 규칙을 따르고 있습니다.
 
-## GitHub Branch
+<br/><br/>
+
+## GitHub Branch(내부 개발자 전용)
+
+### 개발을 시작할 때
+
+1. 개발을 시작할 때는 현재(Origin) Repository에서 Issue를 생성합니다.
+   ![이슈 만들기](../picture/inner_branch/1_Create_Issue.png)
+
+2. 이후 Issue에서 Origin Repository의 Dev Branch에서 새로운 Branch를 생성합니다. **오른쪽 아래에 `Create a Branch`를 통해서 생성합니다!!**
+   ![브랜치 만들기](../picture/inner_branch/2_Create_a_Branch.png)
+
+   - 이때 브랜치 이름은 다음을 따릅니다.
+     - **새로운 기능 개발 : feature/#[Issue의 번호]**
+     - **버그 픽스 : fix/#[Issue의 번호]**
+     - **기능 리팩토링 : refactor/#[Issue의 번호]**
+
+   ![브랜치 만들기 - 상세](../picture/inner_branch/3_Create_a_Branch_Detail.png)
+
+3. Loacl에서 Fetch를 통해 만든 New Branch(feature or fix or refactor)을 들고옵니다.
+
+```Shell
+git fetch origin
+```
+
+4. 해당 Branch로 checkout 이후 기능 개발을 진행합니다.
+
+```Shell
+git checkout feature/#1 # 예시입니다.
+```
+
+### 개발을 종료할 때
+
+1. 기능 개발이 종료되면 현재(Origin) Repository의 Branch(feature or fix or refactor)로 변경 사항을 Push 합니다.
+
+```Shell
+git push origin feature/#1 # 예시입니다.
+```
+
+2. 위에 보이는 Compare & Pull Request 버튼을 누릅니다!
+   ![PR 만들기](../picture/inner_branch/4_Compare_Pull_Reqeust.png)
+3. Code Review 이후 마지막으로 Approve한 사람은 `Dev`로 `Squash And Merge`를 해줍니다.
+   ![PR 만들기](../picture/inner_branch/5_Merge.png)
+4. PR이 `Merge`되면 Local에서는 dev Branch로 checkout합니다.
+
+```Shell
+git checkout dev
+```
+
+5. Local에서 현재(Origin) Repository의 dev Branch를 pull 받습니다.
+
+```Shell
+git pull origin dev
+```
+<br/><br/>
+
+## GitHub Branch(외부 개발자 전용)
 ### Flow Strategy
-<img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_6_BE/assets/62001944/8ca18848-1286-4610-afd4-3a39e1270be9" width="600">
+![플로우 전략](../picture/outer_branch/1_Flow_Strategy.png)
 
 - 사용자는 먼저 Upstream Repository를 자신의 GitHub 계정으로 포크(fork)하고, 이 포크(fork)된 Origin Repository를 로컬 컴퓨터로 **Clone**하여 작업합니다.
 
@@ -15,7 +71,7 @@
 - PR이 완료 된 후 Upstream Repository의 최신 변경 사항을 가져오기 위해 Local에서 풀(pull)을 사용합니다.
 
 ### 개발을 시작할 때
-<img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_6_BE/assets/62001944/a5380849-5d07-47cc-9a24-ecef533c606d" width="600">
+![개발 시작](../picture/outer_branch/2_Start_Feature.png)
 
 1. 개발을 시작할 때는 Upstream Repository에서 Issue를 생성합니다.
 2. 이후 Issue에서 Origin Repository의 Dev Branch에서 새로운 Branch를 생성합니다
@@ -26,8 +82,8 @@
 3. Loacl에서 Fetch를 통해 만든 New Branch(feature or fix or refactor)을 들고옵니다.
 4. 해당 Branch로 checkout 이후 기능 개발을 진행합니다.
 
-### 개발을 종료할 때
-<img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_6_BE/assets/62001944/0c0d26c6-3fec-4b20-aa02-6c91dee7a024" width="600">
+### 개발을 종료할 때 
+![개발 종료](../picture/outer_branch/3_End_Feature.png)
 
 1. 기능 개발이 종료되면 Origin Repository의 Branch(feature or fix or refactor)로 변경 사항을 Push 합니다.
 2. Origin Repository에서 Upstream Repository로 PR을 보냅니다.
@@ -36,22 +92,19 @@
 5. Local에서 Upstream Repository의 dev Branch를 pull 받습니다.
 6. 마지막으로 Origin Repository의 dev Branch를 Update하기 위해 Push를 해줍니다.
 
-### Main Branch가 갱신될 때
-<img src="https://github.com/goormthon-Univ/2024_BEOTKKOTTHON_TEAM_6_BE/assets/62001944/530dd292-8894-400a-bb77-fbfdd6946f17" width="600">
-
-1. 만약 Release Version을 낼 때는 Upstream의 dev Branch에서 main Branch로 PR을 날립니다.
-2. 해당 Repository의 모든 사용자가 Code를 재확인한 후 Merge를 합니다.
+<br/><br/>
 
 ## Branch Naming Convention
 | Commit Type | Description  |
 |-------------|--------------|
 | main        | 테스트 완료 후 배포용 |
-| test         | A/B 테스트용    |
-| qa         | QA용    |
-| dev         | 개발 커밋 통합용    |
+| release     | QA/A/B 테스트용    |
+| develop     | 개발 커밋 통합용    |
 | feat        | 기능 개발용       |
 | fix         | 버그 수정용       |
 | refactor    | 코드 리팩토링      |
+
+<br/><br/>
 
 ## Commit Convention
 | Commit Type | Description |
@@ -67,6 +120,8 @@
 | comment | Add or modify necessary comments |
 | rename | Only changes to file or folder names or locations |
 | remove | Only performing the action of deleting files |
+
+<br/><br/>
 
 ## PR Convention
 | Icon | Code                       | Description                       |
